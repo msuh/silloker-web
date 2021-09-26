@@ -1,0 +1,16 @@
+<!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
+<script src="/libs/d3.tip.v0.6.3.js"></script>
+
+<div>
+  <mat-radio-group
+      aria-label="Select graph display"
+      (change)="onDisplayOptionChange($event)"
+  required>
+  <mat-radio-button class="input-format" value="stacked" checked>Stacked</mat-radio-button>
+  <mat-radio-button class="input-format" value="grouped">Grouped</mat-radio-button>
+  </mat-radio-group>
+</div>
+
+<figure id="aggregation-graph" width="960" height="500"></figure>
+
+

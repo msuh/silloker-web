@@ -1,0 +1,82 @@
+<div class="outer-container">
+	<div class="title">
+      	<h2>SEARCH AND DOWNLOAD</h2>
+    </div>
+    <ng-template [ngIf]="errorMessage">
+        <div>
+          <div class="alert alert-warning" role="alert">
+            {{errorMessage}}
+          </div>
+        </div>
+     </ng-template>
+      <p>
+	      	There are a variety of documents you can download. Please refer to this
+	      <a routerLink="/search/instruction">page</a>
+	       for the details on the "what and how" for you to fully take advantage of its potentials.
+	       鳥銃, 火藥, 焰硝
+   	  </p>
+      <hr>
+
+		<mat-form-field appearance="fill">
+	        <mat-label for="sel1" class="col-sm-5 col-form-label">Record Type</mat-label>
+	        <mat-select [(value)]="selectedType">
+			    <mat-option *ngFor="let type of types" [value]="type.value">
+			      {{type.displayValue}}
+			    </mat-option>
+			</mat-select>
+	 </mat-form-field>
+   <mat-form-field appearance="fill">
+          <mat-label class="col-sm-4 col-form-label">Year Start</mat-label>
+          <input #yearStart matInput
+                       type="number"
+                       placeholder="1500"
+                       (keyup.enter)="$event.target.blur()">
+   </mat-form-field>
+   <mat-form-field appearance="fill">
+          <mat-label class="col-sm-4 col-form-label">Year End</mat-label>
+          <input #yearEnd matInput
+                       type="number"
+                       placeholder="1560"
+                       (keyup.enter)="$event.target.blur()">
+   </mat-form-field>
+   <mat-form-field class="wide-input-field">
+          <mat-chip-list #chipList aria-label="aggregation-input">
+            <mat-chip *ngFor="let input of keywordInputs" [selectable]="selectable"
+                     [removable]="removable" (removed)="removeKeywordInput(input)">
+              {{input}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Keyword"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="addKeywordInput($event)">
+          </mat-chip-list>
+   </mat-form-field>
+
+	 <!-- <mat-form-field appearance="standard" class="wide-input-field">
+		    <mat-label for="content" class="col-md-8 col-form-label">Keyword</mat-label>
+		    <input #keyword matInput
+                       type="text"
+                       placeholder="進取京城"
+                       (keyup.enter)="$event.target.blur()"
+                       required>
+   </mat-form-field> -->
+      <!-- // Advanced Search -->
+      <!-- <form-download></form-download> -->
+
+	  <button mat-raised-button (click)="searchRecords(yearStart.value, yearEnd.value)">Search</button>
+	  <button mat-raised-button color="accent" (click)="downloadRecords(yearStart.value, yearEnd.value)">Download</button>
+
+	  <ng-template [ngIf]="isFetching" [ngIfElse]="loaded">
+        <mat-spinner class="center"></mat-spinner>
+      </ng-template>
+      <ng-template #loaded>
+         <ng-template [ngIf]="totalCount!==0">
+           <div>
+              <p>Total count: {{totalCount}} </p>
+           </div>
+           <search-result [searchResults]=searchResults ></search-result>
+  	     </ng-template>
+      </ng-template>
+</div>

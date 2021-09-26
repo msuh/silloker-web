@@ -1,0 +1,56 @@
+<div class="outer-container">
+      <div class="title">
+        <h2>AGGREGATION</h2>
+     </div>
+     <ng-template [ngIf]="errorMessage">
+        <div>
+          <div class="alert alert-warning" role="alert">
+            {{errorMessage}}
+          </div>
+        </div>
+      </ng-template>
+      <div>
+        <mat-form-field appearance="fill">
+          <mat-label for="sel1" class="col-sm-4 col-form-label">Record Type</mat-label>
+          <mat-select [(value)]="selectedType">
+            <mat-option *ngFor="let type of types" [value]="type.value">
+              {{type.displayValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="wide-input-field">
+          <mat-chip-list #chipList aria-label="aggregation-input">
+            <mat-chip *ngFor="let input of keywordInputs" [selectable]="selectable"
+                     [removable]="removable" (removed)="removeKeywordInput(input)">
+              {{input}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="keyword to graph"
+                   [matChipInputFor]="chipList"
+                   [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                   [matChipInputAddOnBlur]="addOnBlur"
+                   (matChipInputTokenEnd)="addKeywordInput($event)">
+          </mat-chip-list>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="" (click)="graphAggregation()">Submit</button>
+      </div>
+
+      <!-- <ng-template #noError> -->
+        <div class="inner-container">
+          <mat-card>
+            Graph of the number of entries that contain the given search words by western year.
+            鳥銃, 火藥, 焰硝
+          </mat-card>
+        </div>
+
+        <ng-template [ngIf]="isFetching" [ngIfElse]="loaded">
+          <mat-spinner class="center"></mat-spinner>
+        </ng-template>
+        <ng-template #loaded>
+          <aggregation-graph [aggregationOutput]=output ></aggregation-graph>
+                 <!-- <div id="div_searchResult"></div> -->
+          <!-- </ng-template> -->
+        </ng-template>
+
+</div>
