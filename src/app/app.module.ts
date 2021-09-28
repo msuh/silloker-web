@@ -15,11 +15,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table'; 
 import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
+
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 // Custom components
-import { HomeComponent } from './home.component';
+import { PublicComponent } from './layout/public.component';
 import { SearchComponent } from './search/search.component';
 import { TopNavbarComponent } from './top-navbar/top-navbar.component';
 import { AggregationComponent } from './aggregation/aggregation.component';
@@ -29,11 +31,12 @@ import { FormDownloadComponent } from './form-download/form-download.component';
 import { InstructionComponent } from './instruction/instruction.component';
 import { AggregationGraphComponent } from './aggregation-graph/aggregation-graph.component';
 import { SearchResultComponent } from './search-result/search-result.component';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
   declarations: [
-    HomeComponent,
+    PublicComponent,
     SearchComponent,
     TopNavbarComponent,
     AggregationComponent,
@@ -42,7 +45,8 @@ import { SearchResultComponent } from './search-result/search-result.component';
     FormDownloadComponent,
     InstructionComponent,
     AggregationGraphComponent,
-    SearchResultComponent
+    SearchResultComponent,
+    FooterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -61,8 +65,9 @@ import { SearchResultComponent } from './search-result/search-result.component';
     MatTableModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatToolbarModule,
   ],
   providers: [],
-  bootstrap: [HomeComponent]
+  bootstrap: [PublicComponent]
 })
 export class AppModule { }

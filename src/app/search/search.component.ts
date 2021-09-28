@@ -40,6 +40,11 @@ export interface RecordEntity {
 	edited: boolean;
 }
 
+export interface SearchResult {
+  totalCount: number;
+  entities: RecordEntity[];
+}
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -99,8 +104,6 @@ export class SearchComponent {
     if (input) {
       input.value = '';
     }
-
-    console.log(this.keywordInputs);
   }
 
   removeKeywordInput(input: string): void {
@@ -168,11 +171,11 @@ export class SearchComponent {
     }
 
     console.log(input);
-    this.http.post<RecordEntity[]>("http://localhost:8080/record/search?page=1&size=50", input, this.httpOptions)
+    this.http.post<SearchResult>("http://localhost:8080/record/search?page=1&size=50", input, this.httpOptions)
     .subscribe( (response) => {
           //console.log(response);
-          this.totalCount = response.length;
-          this.searchResults = response;
+          this.totalCount = response.totalCount;
+          this.searchResults = response.entities;
           this.isFetching = false;
         },
         error => {

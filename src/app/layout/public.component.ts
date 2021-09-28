@@ -3,9 +3,9 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  templateUrl: './public.component.html',
+  styleUrls: ['./public.component.css']
 })
-export class HomeComponent {
+export class PublicComponent {
   title = 'silloker-web';
 }

@@ -88,6 +88,8 @@ Angular Material CSS styling does not get applied automatically. We must import 
 Global css file is configured in `angular.json` under `styles` where it is defaulted to be "src/style.css".
 
 
+Useful examples of using angular components: https://mdbootstrap.com/docs/angular/navigation/mega-menu/
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
