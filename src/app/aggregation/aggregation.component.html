@@ -48,9 +48,8 @@
           <mat-spinner class="center"></mat-spinner>
         </ng-template>
         <ng-template #loaded>
-          <aggregation-graph [aggregationOutput]=output ></aggregation-graph>
-                 <!-- <div id="div_searchResult"></div> -->
-          <!-- </ng-template> -->
+          <aggregation-graph [aggregationOutput]=keywordOutput ></aggregation-graph>
+          <aggregation-graph [aggregationOutput]=recordCountOutput ></aggregation-graph>
         </ng-template>
 
 </div>

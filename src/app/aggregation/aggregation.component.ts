@@ -7,7 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, throwError, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
-export interface KeywordInputAndAggregation {
+export interface KeywordInputAndAggregationV1 {
   // The list of keywords to query the count by year
   // Ex. ["keyword0", "keyword1"]
   keywords: string[];
@@ -22,7 +22,22 @@ export interface KeywordInputAndAggregation {
   //   "garrison": [ {year: 1400, count: 812}, ...]
   // ]
   totalRecordCount: KeywordAggregation[][];
+}
 
+export interface KeywordInputAndAggregationV2 {
+  // The list of keywords to query the count by year
+  // Ex. ["keyword0", "keyword1"]
+  keywords: string[];
+  // The aggregation of the count of records that contains the keyword by year by keyword index
+  // Ex. [
+  //   0: [ {year: 1626, count: 3}, {year: 1650, count: 5}, ... ] // keyword0
+  //   1: [ {year: 1627, count: 2}, {year: 1650, count: 1}, ... ] // keyword1
+  // ]
+  aggregation: KeywordAggregation[][];
+  // Whether to graph this as a secondary graph in the same svg.
+  graphAsSecondary: boolean;
+  // The id of the graph selector.
+  graphSelector: string;
 }
 
 // Example Keywords to Search: 鳥銃, 火藥, 焰硝
@@ -59,18 +74,22 @@ export class AggregationComponent {
   searchKeyword: string;
   isFetching = false;
   errorMessage: string = "";
+  // TODO: Create a common class to export shared data and structure.
+  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
   types: RecordType[] = [
     {value: 'all', displayValue: 'All'},
-    {value: 'wangjo', displayValue: '왕조실록 Wangjo Sillok'},
-    {value: 'garrison', displayValue: '군영등록 Garrison'},
-    {value: 'secretariat', displayValue: '승정원일기 Secretarit'}
+    {value: 'WANGJO', displayValue: '왕조실록 Wangjo Sillok'},
+    {value: 'GARRISON', displayValue: '군영등록 Garrison'},
+    {value: 'SECRETARIAT', displayValue: '승정원일기 Secretarit'}
   ];
 
   selectedType = 'all';
 
   // keyword list to submit to draw the graph
   //outputAggregation: KeywordAggregation[][] = [];
-  output: KeywordInputAndAggregation;
+  keywordOutput: KeywordInputAndAggregationV2;
+  // The output for total record Count. 
+  recordCountOutput: KeywordInputAndAggregationV2;
 
   constructor(
   	private readonly resolver: ComponentFactoryResolver,
@@ -104,17 +123,19 @@ export class AggregationComponent {
       this.isFetching = true;
       
       // Accumulates the query list for the keywords
+      // TODO(mysuh): Have these queried by the record type we select, not all. 
       let queryList = {};
       for (let inputIndex in this.keywordInputs) {
           let input: SearchableRecord = {content: [this.keywordInputs[inputIndex]] };
           queryList[inputIndex] = this.http.post<KeywordAggregation[]>("http://localhost:8080/record/aggregation", input, this.httpOptions);
       }
 
+      console.log(this.selectedType);
       // We also query the number of total entries for each record type that's searched within.
-      if (this.selectedType) {
-        queryList["wangjo"] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/WANGJO");
-        queryList["secretariat"] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/SECRETARIAT");
-        queryList["garrison"] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/GARRISON");
+      if (this.selectedType == "all") {
+        for(let type of this.recordTypes) {
+          queryList[type] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + type);
+        }
       } else {
         queryList[this.selectedType] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + this.selectedType);  
       }
@@ -129,20 +150,24 @@ export class AggregationComponent {
           }
           // The implementation detail heavily replies on this being in the order they expect it to be by record type.
           let countByRecordType = [];
-          if (response["wangjo"] != null) {
-            countByRecordType.push(response["wangjo"]);
-          }
-          if (response["secretariat"] != null) {
-            countByRecordType.push(response["secretariat"]);
-          }
-          if (response["garrison"] != null) {
-            countByRecordType.push(response["garrison"]);
+          for (let type of this.recordTypes) {
+            if (response[type] != null) {
+              countByRecordType.push(response[type]);
+            }  
           }
           
-          let newOutput: KeywordInputAndAggregation = {keywords: this.keywordInputs, 
+          let newOutput: KeywordInputAndAggregationV2 = {keywords: this.keywordInputs, 
                                                        aggregation: outputAggregation,
-                                                       totalRecordCount: countByRecordType};
-          this.output = newOutput;
+                                                       graphAsSecondary: false,
+                                                       graphSelector: "aggregation-graph-1"};
+          let countOutput: KeywordInputAndAggregationV2 = {keywords: this.recordTypes, 
+                                                       aggregation: countByRecordType,
+                                                       graphAsSecondary: true,
+                                                       graphSelector: "aggregation-graph-2"};
+          console.log(newOutput);
+          console.log(countOutput);
+          this.keywordOutput = newOutput;
+          this.recordCountOutput = countOutput;
           this.isFetching = false;
         },
         error => {
