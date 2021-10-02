@@ -17,14 +17,20 @@
    	  </p>
       <hr>
 
-		<mat-form-field appearance="fill">
-	        <mat-label for="sel1" class="col-sm-5 col-form-label">Record Type</mat-label>
-	        <mat-select [(value)]="selectedType">
+    <section [formGroup]="selectedRecordTypes">
+          <h5>Record Types</h5>
+          <mat-checkbox class="record-check-box" formControlName="WANGJO">  왕조실록 Wangjo Sillok </mat-checkbox>
+          <mat-checkbox class="record-check-box" formControlName="GARRISON">  군영등록 Garrison </mat-checkbox>
+          <mat-checkbox class="record-check-box" formControlName="SECRETARIAT">  승정원일기 Secretarit </mat-checkbox>
+    </section>
+		<!-- <mat-form-field appearance="fill">
+      <mat-label for="sel1" class="col-sm-5 col-form-label">Record Type</mat-label>
+      <mat-select [(value)]="selectedType">
 			    <mat-option *ngFor="let type of types" [value]="type.value">
 			      {{type.displayValue}}
 			    </mat-option>
-			</mat-select>
-	 </mat-form-field>
+			</mat-select> 
+	 </mat-form-field> -->
    <mat-form-field appearance="fill">
           <mat-label class="col-sm-4 col-form-label">Year Start</mat-label>
           <input #yearStart matInput
@@ -65,13 +71,19 @@
       <!-- // Advanced Search -->
       <!-- <form-download></form-download> -->
 
-	  <button mat-raised-button (click)="searchRecords(yearStart.value, yearEnd.value)">Search</button>
+	  <button mat-raised-button (click)="searchRecords(yearStart.value, yearEnd.value, 0)">Search</button>
 	  <button mat-raised-button color="accent" (click)="downloadRecords(yearStart.value, yearEnd.value)">Download</button>
 
 	  <ng-template [ngIf]="isFetching" [ngIfElse]="loaded">
-        <mat-spinner class="center"></mat-spinner>
+        <mat-spinner class="loading center"></mat-spinner>
       </ng-template>
       <ng-template #loaded>
+        <mat-paginator [length]="totalCount"
+                       [pageSize]="50"
+                       [showFirstLastButtons]="true"
+                       [pageIndex]="resultPageIndex"
+                       (page)="searchRecords(yearStart.value, yearEnd.value, $event.pageIndex)">
+        </mat-paginator>
          <ng-template [ngIf]="totalCount!==0">
            <div>
               <p>Total count: {{totalCount}} </p>

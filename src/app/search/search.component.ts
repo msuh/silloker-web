@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
 export interface RecordType {
   value: string;
@@ -12,7 +13,7 @@ export interface RecordType {
 export interface SearchableRecord {
   id?: number;
   title?: string;
-  recordType?: string;
+  recordType?: string[];
   year1?: number;
   year2?: number;
   month?: number;
@@ -51,23 +52,27 @@ export interface SearchResult {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
-  
-  types: RecordType[] = [
-    {value: 'all', displayValue: 'All'},
-    {value: 'WANGJO', displayValue: '왕조실록 Wangjo Sillok'},
-    {value: 'GARRISON', displayValue: '군영등록 Garrison'},
-    {value: 'SECRETARIAT', displayValue: '승정원일기 Secretarit'}
-  ];
+  selectedRecordTypes: FormGroup;
 
-  selectedType = 'all';
+  constructor(private http: HttpClient, fb: FormBuilder) {
+    this.selectedRecordTypes = fb.group({
+       WANGJO: true,
+       GARRISON: true,
+       SECRETARIAT: true
+    });
+  }
+
   searchResults: RecordEntity[];
   totalCount = 0;
+  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
 
+  // pagination index
+  resultPageIndex = 0;
   // configurations for chip list
   visible = true;
   selectable = true;
   removable = true;
-  addOnBlur = true;  
+  addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordInputs: string[] = [];
 
@@ -91,7 +96,6 @@ export class SearchComponent {
   isFetching = false;
   errorMessage: string = "";
 
-  constructor(private http: HttpClient,) { }
 
   // Add keyword input box
   addKeywordInput(event: MatChipInputEvent): void {
@@ -151,13 +155,13 @@ export class SearchComponent {
   	return true;
   }
 
-  searchRecords(yearStart: number, yearEnd: number) {
+  searchRecords(yearStart: number, yearEnd: number, pageIndex: number) {
     this.errorMessage = "";
     if (!this.validateParameters(yearStart, yearEnd)) {
       return;
     }
 
-    this.isFetching = true;
+     
 
     let input: SearchableRecord = {content: this.keywordInputs };
     if (yearStart) {
@@ -166,12 +170,27 @@ export class SearchComponent {
     if (yearEnd) {
       input["year2"] = yearEnd;
     }
-    if (this.selectedType !== "all") {
-      input["recordType"] = this.selectedType;
+
+    let selectedTypes = [];
+    for (let key in this.selectedRecordTypes.value) {
+      if (this.selectedRecordTypes.value[key]) {
+        selectedTypes.push(key);
+      }
     }
+    if (selectedTypes.length == 0) {
+      this.errorMessage = "Select at least one record type to search from";
+    } else if(selectedTypes.length !== this.recordTypes.length) {
+      // Everything select means we don't have to specify the record type. It will automatically search from all.
+      input["recordType"]=selectedTypes;
+    } 
+
 
     console.log(input);
-    this.http.post<SearchResult>("http://localhost:8080/record/search?page=1&size=50", input, this.httpOptions)
+
+    this.isFetching = true;
+    this.resultPageIndex = pageIndex;
+
+    this.http.post<SearchResult>("http://localhost:8080/record/search?page="+pageIndex+"&size=50", input, this.httpOptions)
     .subscribe( (response) => {
           //console.log(response);
           this.totalCount = response.totalCount;
