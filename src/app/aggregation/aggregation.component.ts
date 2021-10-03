@@ -74,6 +74,9 @@ export class AggregationComponent {
   searchKeyword: string;
   isFetching = false;
   errorMessage: string = "";
+  selectedRecordTypes = [];
+
+  // readonly variables
   // TODO: Create a common class to export shared data and structure.
   recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
   types: RecordType[] = [
@@ -82,8 +85,6 @@ export class AggregationComponent {
     {value: 'GARRISON', displayValue: '군영등록 Garrison'},
     {value: 'SECRETARIAT', displayValue: '승정원일기 Secretarit'}
   ];
-
-  selectedType = 'all';
 
   // keyword list to submit to draw the graph
   //outputAggregation: KeywordAggregation[][] = [];
@@ -126,18 +127,13 @@ export class AggregationComponent {
       // TODO(mysuh): Have these queried by the record type we select, not all. 
       let queryList = {};
       for (let inputIndex in this.keywordInputs) {
-          let input: SearchableRecord = {content: [this.keywordInputs[inputIndex]] };
+          let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[inputIndex]] };
           queryList[inputIndex] = this.http.post<KeywordAggregation[]>("http://localhost:8080/record/aggregation", input, this.httpOptions);
       }
 
-      console.log(this.selectedType);
       // We also query the number of total entries for each record type that's searched within.
-      if (this.selectedType == "all") {
-        for(let type of this.recordTypes) {
-          queryList[type] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + type);
-        }
-      } else {
-        queryList[this.selectedType] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + this.selectedType);  
+      for(let type of this.selectedRecordTypes) {
+        queryList[type] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + type);
       }
       
 
@@ -160,12 +156,10 @@ export class AggregationComponent {
                                                        aggregation: outputAggregation,
                                                        graphAsSecondary: false,
                                                        graphSelector: "aggregation-graph-1"};
-          let countOutput: KeywordInputAndAggregationV2 = {keywords: this.recordTypes, 
+          let countOutput: KeywordInputAndAggregationV2 = {keywords: this.selectedRecordTypes, 
                                                        aggregation: countByRecordType,
                                                        graphAsSecondary: true,
                                                        graphSelector: "aggregation-graph-2"};
-          console.log(newOutput);
-          console.log(countOutput);
           this.keywordOutput = newOutput;
           this.recordCountOutput = countOutput;
           this.isFetching = false;
@@ -197,4 +191,7 @@ export class AggregationComponent {
     }
   }
 
+  recordTypeChanged(event: string[]) {
+    this.selectedRecordTypes = event;
+  }
 }

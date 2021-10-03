@@ -10,14 +10,8 @@
         </div>
       </ng-template>
       <div>
-        <mat-form-field appearance="fill">
-          <mat-label for="sel1" class="col-sm-4 col-form-label">Record Type</mat-label>
-          <mat-select [(value)]="selectedType">
-            <mat-option *ngFor="let type of types" [value]="type.value">
-              {{type.displayValue}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+        <app-record-type-selector (recordSelectEvent)="recordTypeChanged($event)"></app-record-type-selector>
+        
         <mat-form-field class="wide-input-field">
           <mat-chip-list #chipList aria-label="aggregation-input">
             <mat-chip *ngFor="let input of keywordInputs" [selectable]="selectable"

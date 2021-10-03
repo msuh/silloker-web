@@ -34,6 +34,7 @@ import { InstructionComponent } from './instruction/instruction.component';
 import { AggregationGraphComponent } from './aggregation-graph/aggregation-graph.component';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { FooterComponent } from './footer/footer.component';
+import { RecordTypeSelectorComponent } from './record-type-selector/record-type-selector.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { FooterComponent } from './footer/footer.component';
     InstructionComponent,
     AggregationGraphComponent,
     SearchResultComponent,
-    FooterComponent
+    FooterComponent,
+    RecordTypeSelectorComponent
   ],
   imports: [
     AppRoutingModule,

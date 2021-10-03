@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
-import {FormBuilder, FormGroup} from '@angular/forms';
 
 export interface RecordType {
   value: string;
@@ -52,20 +51,11 @@ export interface SearchResult {
   styleUrls: ['./search.component.css']
 })
 export class SearchComponent {
-  selectedRecordTypes: FormGroup;
 
-  constructor(private http: HttpClient, fb: FormBuilder) {
-    this.selectedRecordTypes = fb.group({
-       WANGJO: true,
-       GARRISON: true,
-       SECRETARIAT: true
-    });
-  }
+  constructor(private http: HttpClient) {}
 
   searchResults: RecordEntity[];
   totalCount = 0;
-  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
-
   // pagination index
   resultPageIndex = 0;
   // configurations for chip list
@@ -73,6 +63,13 @@ export class SearchComponent {
   selectable = true;
   removable = true;
   addOnBlur = true;
+  //// html used variables
+  isFetching = false;
+  errorMessage: string = "";
+  selectedRecordTypes = [];
+
+  // readonly variables
+  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordInputs: string[] = [];
 
@@ -92,11 +89,6 @@ export class SearchComponent {
     responseType: 'blob'
   };
 
-  //// html used variables
-  isFetching = false;
-  errorMessage: string = "";
-
-
   // Add keyword input box
   addKeywordInput(event: MatChipInputEvent): void {
     const input = event.input;
@@ -115,6 +107,10 @@ export class SearchComponent {
     if (index >= 0) {
       this.keywordInputs.splice(index, 1);
     }
+  }
+
+  recordTypeChanged(event: string[]) {
+    this.selectedRecordTypes = event;
   }
 
 
@@ -171,17 +167,11 @@ export class SearchComponent {
       input["year2"] = yearEnd;
     }
 
-    let selectedTypes = [];
-    for (let key in this.selectedRecordTypes.value) {
-      if (this.selectedRecordTypes.value[key]) {
-        selectedTypes.push(key);
-      }
-    }
-    if (selectedTypes.length == 0) {
+    if (this.selectedRecordTypes.length == 0) {
       this.errorMessage = "Select at least one record type to search from";
-    } else if(selectedTypes.length !== this.recordTypes.length) {
+    } else if(this.selectedRecordTypes.length !== this.recordTypes.length) {
       // Everything select means we don't have to specify the record type. It will automatically search from all.
-      input["recordType"]=selectedTypes;
+      input["recordType"]=this.selectedRecordTypes;
     } 
 
 
@@ -190,6 +180,35 @@ export class SearchComponent {
     this.isFetching = true;
     this.resultPageIndex = pageIndex;
 
+    // Example output search result.
+    // this.searchResults = [
+    //   {
+    //     title: "title1",
+    //     recordType: "Garrison",
+    //     year: 2020,
+    //     month: 10,
+    //     day: 10,
+    //     bookName: "bookName",
+    //     bookVolume: "book Volume",
+    //     bookNumber: "book Number",
+    //     content: "content",
+    //     additionalInformation: "additional Information",
+    //     edited: true
+    //   },
+    //   {
+    //     title: "title2",
+    //     recordType: "Secretariat",
+    //     year: 2020,
+    //     month: 10,
+    //     day: 13,
+    //     bookName: "bookName",
+    //     bookVolume: "book Volume",
+    //     bookNumber: "book Number",
+    //     content: "content bla bla a bunch of content hello bla whats up what sldfj asldjf ;alskdjf laksjdflaskdjflasjdlf jas;ldkfj;laskd jfl;askj dfl;ka sj;dlfk ja bunch of chinese. Let's go let's go lalalal asldkf jasldkfj asldkf jas;lkdfj alskdj falskdfj alskjfas; df;laskdfj a;lskdjf laskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf.",
+    //     additionalInformation: "additional Information",
+    //     edited: true
+    //   }
+    // ]
     this.http.post<SearchResult>("http://localhost:8080/record/search?page="+pageIndex+"&size=50", input, this.httpOptions)
     .subscribe( (response) => {
           //console.log(response);
@@ -203,37 +222,6 @@ export class SearchComponent {
             this.isFetching = false;
         }
     );
-
-  	// submit to API
-  	// Provide fake data.
-  	// this.searchResults = [
-  	// 	{
-  	// 		title: "title1",
-  	// 		recordType: "Garrison",
-  	// 		year: 2020,
-  	// 		month: 10,
-  	// 		day: 10,
-  	// 		bookName: "bookName",
-  	// 		bookVolume: "book Volume",
-  	// 		bookNumber: "book Number",
-  	// 		content: "content",
-  	// 		additionalInformation: "additional Information",
-  	// 		edited: true
-  	// 	},
-  	// 	{
-  	// 		title: "title2",
-  	// 		recordType: "Secretariat",
-  	// 		year: 2020,
-  	// 		month: 10,
-  	// 		day: 13,
-  	// 		bookName: "bookName",
-  	// 		bookVolume: "book Volume",
-  	// 		bookNumber: "book Number",
-  	// 		content: "content bla bla a bunch of content hello bla whats up what sldfj asldjf ;alskdjf laksjdflaskdjflasjdlf jas;ldkfj;laskd jfl;askj dfl;ka sj;dlfk ja bunch of chinese. Let's go let's go lalalal asldkf jasldkfj asldkf jas;lkdfj alskdj falskdfj alskjfas; df;laskdfj a;lskdjf laskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf skjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdfskjd fl;askjdf ;laskdj f;ladjksfl;as jdf. asd;flk asldfkjsd; lfkjasl;dkfjaslkd fj;alsk jdf.",
-  	// 		additionalInformation: "additional Information",
-  	// 		edited: true
-  	// 	}
-  	// ]
   }
 
   downloadRecords(yearStart: number, yearEnd: number) {
