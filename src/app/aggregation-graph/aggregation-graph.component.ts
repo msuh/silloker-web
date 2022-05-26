@@ -45,6 +45,7 @@ export class AggregationGraphComponent implements OnChanges {
     this.createSvg();
     this.graphAggregationGraph(this.aggregationOutput.keywords, 
                               this.aggregationOutput.aggregation); 
+    console.log(this.aggregationOutput);
 
       // this.graphAggregationGraph(["wangjo", "secretariat", "garrison"], 
       //                           this.aggregationOutput.totalRecordCount, true);
@@ -189,9 +190,9 @@ export class AggregationGraphComponent implements OnChanges {
         .domain([0, y1Max])
         .range([this.height, 0]);
     
-    let color = d3.scaleSequential(d3.interpolateMagma).domain([1, data.length]);
+    let color = d3.scaleSequential(d3.interpolateMagma).domain([0, 1]);
     if (this.aggregationOutput.graphAsSecondary) {
-      color = d3.scaleSequential(d3.interpolateBlues).domain([0, data.length]);  
+      color = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 1]);  
     } 
       
     if (this.aggregationOutput.graphAsSecondary) {
@@ -202,9 +203,9 @@ export class AggregationGraphComponent implements OnChanges {
         .data(y01z)
         //.enter()
         .join("path")
-          .attr("fill", function(d, i) { return color(i); })
+          .attr("fill", function(d, i) { return color(1/(i+1)); })
           // .attr("fill", "none")
-          .attr("stroke", function(d, i) { return color(i); })
+          .attr("stroke", function(d, i) { return color(1/(i+1)); })
           .attr("d", d3.area()
             .curve(d3.curveNatural)
             .x(function(d, i) { 
@@ -219,7 +220,7 @@ export class AggregationGraphComponent implements OnChanges {
       let series = this.svg.selectAll(".series")
       .data(y01z)
       .enter().append("g")
-        .attr("fill", function(d, i) { return color(i); });
+        .attr("fill", function(d, i) { return color(1/(i+1)); });
 
       this.rect = series.selectAll("rect")
       .data(function(d) { 
@@ -258,7 +259,7 @@ export class AggregationGraphComponent implements OnChanges {
           .attr("x", this.width - 18)
           .attr("width", 18)
           .attr("height", 18)
-          .style("fill", color);
+          .style("fill", function(d, i) { return color(1/(i+1)); });
 
       legend.append("text")
           .attr("x", this.width - 24)
@@ -277,7 +278,7 @@ export class AggregationGraphComponent implements OnChanges {
           .attr("x", 40)
           .attr("width", 18)
           .attr("height", 18)
-          .style("fill", color);
+          .style("fill", function(d, i) { return color(1/(i+1)); });
 
       legendTotal.append("text")
           .attr("x", 63)

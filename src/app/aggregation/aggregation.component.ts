@@ -74,7 +74,7 @@ export class AggregationComponent {
   searchKeyword: string;
   isFetching = false;
   errorMessage: string = "";
-  selectedRecordTypes = [];
+  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
 
   // readonly variables
   // TODO: Create a common class to export shared data and structure.
@@ -124,7 +124,6 @@ export class AggregationComponent {
       this.isFetching = true;
       
       // Accumulates the query list for the keywords
-      // TODO(mysuh): Have these queried by the record type we select, not all. 
       let queryList = {};
       for (let inputIndex in this.keywordInputs) {
           let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[inputIndex]] };
@@ -146,7 +145,7 @@ export class AggregationComponent {
           }
           // The implementation detail heavily replies on this being in the order they expect it to be by record type.
           let countByRecordType = [];
-          for (let type of this.recordTypes) {
+          for (let type of this.selectedRecordTypes) {
             if (response[type] != null) {
               countByRecordType.push(response[type]);
             }  
