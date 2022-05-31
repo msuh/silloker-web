@@ -66,7 +66,7 @@ export class SearchComponent {
   //// html used variables
   isFetching = false;
   errorMessage: string = "";
-  selectedRecordTypes = [];
+  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
 
   // readonly variables
   recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
@@ -147,6 +147,15 @@ export class SearchComponent {
     }
 
   	// Possibly check for other things? SQL?
+    if (this.keywordInputs.length > 5) {
+      this.errorMessage = "Provide less than 5 keywords";
+      return false;
+    }
+
+    if (this.keywordInputs.length == 0) {
+      this.errorMessage = "Provide at least one keyword";
+      return false;
+    }
 
   	return true;
   }
@@ -167,11 +176,13 @@ export class SearchComponent {
       input["year2"] = yearEnd;
     }
 
+    console.log(this.selectedRecordTypes);
     if (this.selectedRecordTypes.length == 0) {
       this.errorMessage = "Select at least one record type to search from";
+      return;
     } else if(this.selectedRecordTypes.length !== this.recordTypes.length) {
-      // Everything select means we don't have to specify the record type. It will automatically search from all.
-      input["recordType"]=this.selectedRecordTypes;
+       // Everything select means we don't have to specify the record type. It will automatically search from all.
+       input["recordType"]=this.selectedRecordTypes;
     } 
 
 
@@ -248,7 +259,7 @@ export class SearchComponent {
           const url = URL.createObjectURL(response);
           const a = document.createElement('a');
           a.href = url;
-          a.download = "searchResults.tsv";
+          a.download = "search-results.tsv";
           a.click();
           URL.revokeObjectURL(url);
           

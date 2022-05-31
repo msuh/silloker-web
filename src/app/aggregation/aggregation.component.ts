@@ -7,6 +7,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, throwError, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
+// DEPRECATED
 export interface KeywordInputAndAggregationV1 {
   // The list of keywords to query the count by year
   // Ex. ["keyword0", "keyword1"]
@@ -38,6 +39,8 @@ export interface KeywordInputAndAggregationV2 {
   graphAsSecondary: boolean;
   // The id of the graph selector.
   graphSelector: string;
+  // Whether the represented number should be treated as a percentage
+  isPercentage: boolean;
 }
 
 // Example Keywords to Search: 鳥銃, 火藥, 焰硝
@@ -79,16 +82,18 @@ export class AggregationComponent {
   // readonly variables
   // TODO: Create a common class to export shared data and structure.
   recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
-  types: RecordType[] = [
-    {value: 'all', displayValue: 'All'},
-    {value: 'WANGJO', displayValue: '왕조실록 Wangjo Sillok'},
-    {value: 'GARRISON', displayValue: '군영등록 Garrison'},
-    {value: 'SECRETARIAT', displayValue: '승정원일기 Secretarit'}
-  ];
+  
+  // types: RecordType[] = [
+  //   {value: 'all', displayValue: 'All'},
+  //   {value: 'WANGJO', displayValue: '왕조실록 Wangjo Sillok'},
+  //   {value: 'GARRISON', displayValue: '군영등록 Garrison'},
+  //   {value: 'SECRETARIAT', displayValue: '승정원일기 Secretarit'}
+  // ];
 
   // keyword list to submit to draw the graph
   //outputAggregation: KeywordAggregation[][] = [];
   keywordOutput: KeywordInputAndAggregationV2;
+  recordRatioOutput: KeywordInputAndAggregationV2;
   // The output for total record Count. 
   recordCountOutput: KeywordInputAndAggregationV2;
 
@@ -100,11 +105,6 @@ export class AggregationComponent {
   // Submits request to graph the trends for a set of keywords
   graphAggregation(): void {
       this.errorMessage = "";
-      // this.outputAggregation = [
-      //  [ {year: 1626, count: 3}, {year: 1627, count: 2}, {year: 1635, count: 1}, {year: 1637, count: 8}, {year: 1700, count: 9} ],
-      //  [ {year: 1626, count: 4}, {year: 1627, count: 5}, {year: 1635, count: 4}, {year: 1637, count: 7}, {year: 1702, count: 4} ],
-      //  [ {year: 1626, count: 1}, {year: 1627, count: 3}, {year: 1636, count: 2}, {year: 1638, count: 2}, {year: 1701, count: 2} ]
-      // ];
 
       if (this.isFetching) {
         // Display error 
@@ -113,11 +113,11 @@ export class AggregationComponent {
       }
       if (this.keywordInputs.length == 0) {
         // error: You must provide at lesat one keyword
-        this.errorMessage = "You must provide at least one keyword";
+        this.errorMessage = "Provide at least one keyword";
         return;
-      } else if (this.keywordInputs.length > 5) {
+      } else if (this.keywordInputs.length > 4) {
         // error: You can't pass more than 5 keywords
-        this.errorMessage = "You can't pass more than 5 keywords";
+        this.errorMessage = "Provide less than four keyword";
         return;
       }
 
@@ -139,10 +139,17 @@ export class AggregationComponent {
       // forkJoin collects all the queries that only fires the subscribed reaction when all quries finish executing.
       forkJoin(queryList)
       .subscribe( (response) => {
+        console.log(response);
+        // this.outputAggregation = [
+        //  [ {year: 1626, count: 3}, {year: 1627, count: 2}, {year: 1635, count: 1}, {year: 1637, count: 8}, {year: 1700, count: 9} ],
+        //  [ {year: 1626, count: 4}, {year: 1627, count: 5}, {year: 1635, count: 4}, {year: 1637, count: 7}, {year: 1702, count: 4} ],
+        //  [ {year: 1626, count: 1}, {year: 1627, count: 3}, {year: 1636, count: 2}, {year: 1638, count: 2}, {year: 1701, count: 2} ]
+        // ];
           let outputAggregation = [];
           for (let inputIndex in this.keywordInputs) {
             outputAggregation.push(response[inputIndex]);
           }
+
           // The implementation detail heavily replies on this being in the order they expect it to be by record type.
           let countByRecordType = [];
           for (let type of this.selectedRecordTypes) {
@@ -150,22 +157,62 @@ export class AggregationComponent {
               countByRecordType.push(response[type]);
             }  
           }
+
+          let combinedRecordCount = [];
+          for (var i = 1392; i <= 1910; i++) {
+            let outputSum = 0, recordSum = 0;
+            // count = [ {year: 1626, count: 3}, {year: 17000, count: 10}, ... ]
+            for (let keyword of outputAggregation) {
+              for (let count of keyword) {
+                if (count.year == i) {
+                  outputSum += count.count;
+                  break;
+                } else if (count.year > i) {
+                  break;
+                }
+              }
+            }
+            for (let type of countByRecordType) {
+              for (let count of type) {
+                if (count.year == i) {
+                  recordSum += count.count;
+                  break;
+                } else if (count.year > i) {
+                  break;
+                }
+              }
+            }
+            combinedRecordCount.push({"year":i, "count": outputSum/recordSum});
+          }
+          // for (let type in this.selectedRecordTypes) {
+          //   outputAggregation.push(response[inputIndex]);
+          // }
           
           let newOutput: KeywordInputAndAggregationV2 = {keywords: this.keywordInputs, 
                                                        aggregation: outputAggregation,
                                                        graphAsSecondary: false,
-                                                       graphSelector: "aggregation-graph-1"};
+                                                       graphSelector: "aggregation-graph-1",
+                                                       isPercentage: false};
+          let ratioOutput: KeywordInputAndAggregationV2 = {keywords: this.keywordInputs, 
+                                                       aggregation: [combinedRecordCount], // Needs to be a 2d array
+                                                       graphAsSecondary: false,
+                                                       graphSelector: "aggregation-graph-2",
+                                                       isPercentage: true};
           let countOutput: KeywordInputAndAggregationV2 = {keywords: this.selectedRecordTypes, 
                                                        aggregation: countByRecordType,
                                                        graphAsSecondary: true,
-                                                       graphSelector: "aggregation-graph-2"};
+                                                       graphSelector: "aggregation-graph-3",
+                                                       isPercentage: false};
+
           this.keywordOutput = newOutput;
+          this.recordRatioOutput = ratioOutput;
           this.recordCountOutput = countOutput;
           this.isFetching = false;
         },
         error => {
             console.log(error);
-            this.errorMessage = error;
+            this.errorMessage = error.error.error + " " + error.error.message;
+            this.isFetching = false;
         }
       );
   }

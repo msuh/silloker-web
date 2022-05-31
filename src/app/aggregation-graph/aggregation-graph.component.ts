@@ -190,12 +190,11 @@ export class AggregationGraphComponent implements OnChanges {
         .domain([0, y1Max])
         .range([this.height, 0]);
     
-    let color = d3.scaleSequential(d3.interpolateMagma).domain([0, 1]);
-    if (this.aggregationOutput.graphAsSecondary) {
-      color = d3.scaleSequential(d3.interpolateBlues).domain([0.2, 1]);  
-    } 
+    //(interpolateMagma)
+    let color = d3.scaleSequential(d3.interpolateBlues).domain([0, 1]);
       
-    if (this.aggregationOutput.graphAsSecondary) {
+    if (this.aggregationOutput.isPercentage || 
+        this.aggregationOutput.graphAsSecondary) {
       this.svg.append("g").call(d3.axisRight(y));
 
       this.svg.append("g")
@@ -248,46 +247,74 @@ export class AggregationGraphComponent implements OnChanges {
             .tickSize(1)
             .tickValues(this.getTickValues(xz)));
 
-    if (this.aggregationOutput.graphAsSecondary) {
-      let legend = this.svg.selectAll(".legend")
+    let legend = this.svg.selectAll(".legend")
           .data(Array.apply(null, {length: data.length}).map(Number.call, Number))
         .enter().append("g")
           .attr("class", "legend")
           .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-      legend.append("rect")
+    legend.append("rect")
           .attr("x", this.width - 18)
           .attr("width", 18)
           .attr("height", 18)
           .style("fill", function(d, i) { return color(1/(i+1)); });
 
+    if (this.aggregationOutput.isPercentage) {
       legend.append("text")
-          .attr("x", this.width - 24)
-          .attr("y", 9)
-          .attr("dy", ".35em")
-          .style("text-anchor", "end")
-          .text(function(i) { return "Total Count: "+ getArraySum(data[i]) +" / "+ searchKeywords[i]; });
+            .attr("x", this.width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(i) { return "Total Ratio: " + searchKeywords.join(", "); });
     } else {
-      let legendTotal = this.svg.selectAll(".legendTotal")
-          .data(Array.apply(null, {length: data.length}).map(Number.call, Number))
-        .enter().append("g")
-          .attr("class", "legendTotal")
-          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
-
-      legendTotal.append("rect")
-          .attr("x", 40)
-          .attr("width", 18)
-          .attr("height", 18)
-          .style("fill", function(d, i) { return color(1/(i+1)); });
-
-      legendTotal.append("text")
-          .attr("x", 63)
-          .attr("y", 9)
-          .attr("dy", ".35em")
-          // .style("text-anchor", "end")
-          .text(function(d, i) { 
-            return "Total Count: "+ getArraySum(data[i]) +" / "+ searchKeywords[i]; });
+      legend.append("text")
+            .attr("x", this.width - 24)
+            .attr("y", 9)
+            .attr("dy", ".35em")
+            .style("text-anchor", "end")
+            .text(function(i) { return "Total Count: "+ getArraySum(data[i]) +" / "+ searchKeywords[i]; });
     }
+    // if (this.aggregationOutput.graphAsSecondary) {
+    //   let legend = this.svg.selectAll(".legend")
+    //       .data(Array.apply(null, {length: data.length}).map(Number.call, Number))
+    //     .enter().append("g")
+    //       .attr("class", "legend")
+    //       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    //   legend.append("rect")
+    //       .attr("x", this.width - 18)
+    //       .attr("width", 18)
+    //       .attr("height", 18)
+    //       .style("fill", function(d, i) { return color(1/(i+1)); });
+
+    //   legend.append("text")
+    //       .attr("x", this.width - 24)
+    //       .attr("y", 9)
+    //       .attr("dy", ".35em")
+    //       .style("text-anchor", "end")
+    //       .text(function(i) { return "Total Count: "+ getArraySum(data[i]) +" / "+ searchKeywords[i]; });
+    // } else if (this.aggregationOutput.isPercentage) {
+    // } else {
+    //   let legendTotal = this.svg.selectAll(".legendTotal")
+    //       .data(Array.apply(null, {length: data.length}).map(Number.call, Number))
+    //     .enter().append("g")
+    //       .attr("class", "legendTotal")
+    //       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+    //   legendTotal.append("rect")
+    //       .attr("x", 40)
+    //       .attr("width", 18)
+    //       .attr("height", 18)
+    //       .style("fill", function(d, i) { return color(1/(i+1)); });
+
+    //   legendTotal.append("text")
+    //       .attr("x", 63)
+    //       .attr("y", 9)
+    //       .attr("dy", ".35em")
+    //       // .style("text-anchor", "end")
+    //       .text(function(d, i) { 
+    //         return "Total Count: "+ getArraySum(data[i]) +" / "+ searchKeywords[i]; });
+    // }
 
     function getArraySum(data: KeywordAggregation[]) {
       let sum = 0;
@@ -533,7 +560,7 @@ private getTickValues(xRange) {
     //////////////////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////////////// original graph /////////////////////////////////////////////
     
-    let color = d3.scaleSequential(d3.interpolateMagma)
+    let color = d3.scaleSequential(d3.interpolateBlues)
     .domain([0, n -1]);
 
     let series = this.svg.selectAll(".series")
