@@ -208,7 +208,21 @@ this.http.post<inputObject>("/record/aggregation", input, httpOptions)
         );
 ```
 
+## Display Architecture
+`index.html` is the main location that initially displays the contents when routed to `/` (home). It uses the `<app-root></app-root>` selector to display the components. The selectors for each component are determined in the `.ts` file within each component directory. 
 
+```
+<top-navbar></top-navbar>
+
+<!-- ///// Main Content ///// -->
+<div class="main-container container-fluid text-center">
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer></app-footer>
+```
+
+The `<router-outlet></router-outlet>` defines where the selected routed components should be generated and displayed. 
 
 
 

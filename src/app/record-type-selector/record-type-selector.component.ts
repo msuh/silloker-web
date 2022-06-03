@@ -12,13 +12,13 @@ export class RecordTypeSelectorComponent {
   selectedRecordTypesForm: FormGroup;
 
   private selectedReocrdTypes: string[];
-  readonly recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
 
   constructor(fb: FormBuilder) {
   	this.selectedRecordTypesForm = fb.group({
        WANGJO: true,
-       GARRISON: true,
-       SECRETARIAT: true
+       PIBYUN: false,
+       SECRETARIAT: true,
+       GARRISON: false,
     });
   }
 

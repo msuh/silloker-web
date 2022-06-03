@@ -18,17 +18,3 @@ export class SearchResultComponent implements OnChanges {
   }
 
 }
-
-//	id: number;
-//	title: string;
-//	recordType: string;
-//	year: number;
-//	month: number;
-//	day: number;
-//	bookName: string;
-//	bookVolume: string;
-//	bookNumber: string;
-//	content: string;
-//	originalSourceReference: string;
-//	additionalInformation: string;
-//	edited: boolean;

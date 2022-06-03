@@ -102,25 +102,33 @@ export class AggregationComponent {
     private http: HttpClient,
   ) {}
 
-  // Submits request to graph the trends for a set of keywords
-  graphAggregation(): void {
-      this.errorMessage = "";
-
+  // Return true if all validations pass
+  validation(): boolean {
       if (this.isFetching) {
         // Display error 
         this.errorMessage = "Please wait for the system to finish fetching data";
-        return;
+        return false;
       }
       if (this.keywordInputs.length == 0) {
         // error: You must provide at lesat one keyword
         this.errorMessage = "Provide at least one keyword";
-        return;
-      } else if (this.keywordInputs.length > 4) {
-        // error: You can't pass more than 5 keywords
-        this.errorMessage = "Provide less than four keyword";
-        return;
+        return false;
+      } 
+      else if (this.keywordInputs.length > 10) {
+        this.errorMessage = "Provide less than ten keyword";
+        return false;
       }
 
+      return true;
+  }
+  // Submits request to graph the trends for a set of keywords
+  graphAggregation(): void {
+      this.errorMessage = "";
+      if (!this.validation()) {
+        // validation failed
+        return;
+      }
+      
       this.isFetching = true;
       
       // Accumulates the query list for the keywords
@@ -215,6 +223,68 @@ export class AggregationComponent {
             this.isFetching = false;
         }
       );
+  }
+
+  downloadAggregation() {
+      this.errorMessage = "";
+      if (!this.validation()) {
+        // validation failed
+        return;
+      }
+
+      // Only allow one keyword aggregation to be downloaded
+      if (this.keywordInputs.length > 1) {
+        this.errorMessage = "Only provide one keyword for download";
+        return;
+      }
+      
+      this.isFetching = true;
+      
+      // Accumulates the query list for the keywords
+      // let queryList = {};
+      // for (let inputIndex in this.keywordInputs) {
+      //     let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[inputIndex]] };
+      //     queryList[inputIndex] = this.http.post("http://localhost:8080/record/download/aggregation", input, { responseType: 'blob' });
+      // }
+
+
+      // forkJoin(queryList)
+      // .subscribe( (response: any) => {
+      //     this.isFetching = false;
+      //     console.log(response);
+      //     const url = URL.createObjectURL(response);
+      //     const a = document.createElement('a');
+      //     a.href = url;
+      //     a.download = "aggregation-results.tsv";
+      //     a.click();
+      //     URL.revokeObjectURL(url);
+          
+      //   },
+      //   error => {
+      //       console.log(error);
+      //       this.errorMessage = error.error.error + " " + error.error.message;
+      //       this.isFetching = false;
+      //   }
+      // );
+    let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[0]] };
+    this.http.post("http://localhost:8080/record/download/aggregation", input, { responseType: 'blob' })
+    .subscribe( (response: any) => {
+          //const blob = new Blob([response], { type : 'application/octet-stream' } )
+          this.isFetching = false;
+          const url = URL.createObjectURL(response);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = "aggregation-results.tsv";
+          a.click();
+          URL.revokeObjectURL(url);
+          
+        },
+        error => {
+            console.log(error);
+            this.errorMessage = error.error.error + " " + error.error.message;
+            this.isFetching = false;
+        }
+    );
   }
 
   // Add keyword input box

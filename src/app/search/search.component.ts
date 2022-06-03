@@ -11,7 +11,7 @@ export interface RecordType {
 // The object used for search inputs.
 export interface SearchableRecord {
   id?: number;
-  title?: string;
+  title?: string[];
   recordType?: string[];
   year1?: number;
   year2?: number;
@@ -168,7 +168,7 @@ export class SearchComponent {
 
      
 
-    let input: SearchableRecord = {content: this.keywordInputs };
+    let input: SearchableRecord = { content: this.keywordInputs };
     if (yearStart) {
       input["year1"] = yearStart;
     }
@@ -176,7 +176,6 @@ export class SearchComponent {
       input["year2"] = yearEnd;
     }
 
-    console.log(this.selectedRecordTypes);
     if (this.selectedRecordTypes.length == 0) {
       this.errorMessage = "Select at least one record type to search from";
       return;
@@ -185,8 +184,6 @@ export class SearchComponent {
        input["recordType"]=this.selectedRecordTypes;
     } 
 
-
-    console.log(input);
 
     this.isFetching = true;
     this.resultPageIndex = pageIndex;
@@ -250,10 +247,8 @@ export class SearchComponent {
       input["year2"] = yearEnd;
     }
 
-    // responseType: 'blob'
     this.http.post("http://localhost:8080/record/download/search", input, { responseType: 'blob' })
     .subscribe( (response: any) => {
-          // console.log(response);
           //const blob = new Blob([response], { type : 'application/octet-stream' } )
           this.isFetching = false;
           const url = URL.createObjectURL(response);

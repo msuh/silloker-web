@@ -25,7 +25,8 @@
 </table> -->
 
 <div class="inner-container" *ngFor="let record of searchResults">
-  <mat-card>
+  <a [routerLink]="['/record', record.id]">
+  <mat-card id={{record.id}}>
     <mat-card-header>
       <mat-card-title>{{record.title}}</mat-card-title>
       <mat-card-subtitle>
@@ -37,4 +38,5 @@
       {{record.content}}
     </mat-card-content>
   </mat-card>
+  </a>
 </div>

@@ -19,7 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatDividerModule } from '@angular/material/divider';
 
 
 // Custom components
@@ -35,6 +35,8 @@ import { AggregationGraphComponent } from './aggregation-graph/aggregation-graph
 import { SearchResultComponent } from './search-result/search-result.component';
 import { FooterComponent } from './footer/footer.component';
 import { RecordTypeSelectorComponent } from './record-type-selector/record-type-selector.component';
+import { RecordEntityComponent } from './record-entity/record-entity.component';
+import { TagComponent } from './tag/tag.component';
 
 
 @NgModule({
@@ -50,7 +52,9 @@ import { RecordTypeSelectorComponent } from './record-type-selector/record-type-
     AggregationGraphComponent,
     SearchResultComponent,
     FooterComponent,
-    RecordTypeSelectorComponent
+    RecordTypeSelectorComponent,
+    RecordEntityComponent,
+    TagComponent
   ],
   imports: [
     AppRoutingModule,
@@ -71,7 +75,8 @@ import { RecordTypeSelectorComponent } from './record-type-selector/record-type-
     MatCardModule,
     MatToolbarModule,
     MatPaginatorModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatDividerModule
   ],
   providers: [],
   bootstrap: [PublicComponent]
