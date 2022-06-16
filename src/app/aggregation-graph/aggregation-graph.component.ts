@@ -210,7 +210,13 @@ export class AggregationGraphComponent implements OnChanges {
             .x(function(d, i) { 
               return x(xzToString[i]); })
             .y0(d => { return y(d[0]); })
-            .y1(d => { return y(d[1]); })
+            .y1(d => { 
+              if (Number.isNaN(d[1])) {
+                // TODO: what to return here?
+                return y(d[0]);
+              }
+              return y(d[1]); 
+            })
           );
 
     } else {

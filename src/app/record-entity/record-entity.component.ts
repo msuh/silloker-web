@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDividerModule } from '@angular/material/divider';
 import { ActivatedRoute } from '@angular/router';
@@ -43,6 +43,7 @@ export class RecordEntityComponent implements OnInit {
     this.recordId = this.route.snapshot.params['id'];
   }
 
+  // TODO: do a fork-join so that the main content doesn't render faster
   ngOnInit(): void {
     this.http.get<RecordEntity>("http://localhost:8080/record/id/" + this.recordId)
     .subscribe( (response) => {
@@ -65,10 +66,10 @@ export class RecordEntityComponent implements OnInit {
   }
 
   public colorTags(tags : TagEntity[]): void {
-    let content: string = this.record.content;
+    let content = this.record.content;
     for (let tag of tags) {
       if (content.includes(tag.tagContent)) {
-        content = content.replaceAll(tag.tagContent, "<span id='tag'>" + tag.tagContent + "</span>");
+        content = content.replaceAll(tag.tagContent, '<span style="color:red;">' + tag.tagContent + "</span>");
       }
     }
     this.content.nativeElement.innerHTML = content;

@@ -77,11 +77,11 @@ export class AggregationComponent {
   searchKeyword: string;
   isFetching = false;
   errorMessage: string = "";
-  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
+  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'PIBYUN'];
 
   // readonly variables
   // TODO: Create a common class to export shared data and structure.
-  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
+  // recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
   
   // types: RecordType[] = [
   //   {value: 'all', displayValue: 'All'},
@@ -206,7 +206,21 @@ export class AggregationComponent {
                                                        graphAsSecondary: false,
                                                        graphSelector: "aggregation-graph-2",
                                                        isPercentage: true};
-          let countOutput: KeywordInputAndAggregationV2 = {keywords: this.selectedRecordTypes, 
+
+          // TODO: change enum type
+          let recordtypes = [];
+          for (let type in this.selectedRecordTypes) {
+            if (this.selectedRecordTypes[type] == "WANGJO") {
+              recordtypes.push("Veritable Records");
+            }
+            if (this.selectedRecordTypes[type] == "PIBYUN") {
+              recordtypes.push("Border Defense Council");
+            }
+            if (this.selectedRecordTypes[type] == "SECRETARIAT") {
+              recordtypes.push("Secretariat");
+            }
+          }
+          let countOutput: KeywordInputAndAggregationV2 = {keywords: recordtypes, 
                                                        aggregation: countByRecordType,
                                                        graphAsSecondary: true,
                                                        graphSelector: "aggregation-graph-3",

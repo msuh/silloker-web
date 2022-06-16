@@ -16,7 +16,7 @@ export class RecordTypeSelectorComponent {
   constructor(fb: FormBuilder) {
   	this.selectedRecordTypesForm = fb.group({
        WANGJO: true,
-       PIBYUN: false,
+       PIBYUN: true,
        SECRETARIAT: true,
        GARRISON: false,
     });

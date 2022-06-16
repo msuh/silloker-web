@@ -66,10 +66,10 @@ export class SearchComponent {
   //// html used variables
   isFetching = false;
   errorMessage: string = "";
-  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
+  selectedRecordTypes = ['WANGJO', 'SECRETARIAT', 'PIBYUN', 'GARRISON'];
 
   // readonly variables
-  recordTypes = ['WANGJO', 'SECRETARIAT', 'GARRISON'];
+  recordTypes = ['WANGJO', 'SECRETARIAT', 'PIBYUN', 'GARRISON'];
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   keywordInputs: string[] = [];
 
@@ -82,7 +82,6 @@ export class SearchComponent {
 
   readonly httpDownloadOptions = {
     headers: new HttpHeaders({
-      //'Content-Type': 'application/octet-stream',
       'Content-Disposition' : 'attachment',
       'Accept': 'application/octet-stream',
     }),
