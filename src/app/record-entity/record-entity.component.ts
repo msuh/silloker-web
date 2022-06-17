@@ -56,7 +56,7 @@ export class RecordEntityComponent implements OnInit {
     this.http.get<TagEntity[]>("http://localhost:8080/tag/record/" + this.recordId)
     .subscribe( (response) => {
           this.tags = response;
-          this.colorTags(this.tags);
+          // this.colorTags(this.tags);
 
         },
         error => {
@@ -65,14 +65,15 @@ export class RecordEntityComponent implements OnInit {
         );
   }
 
-  public colorTags(tags : TagEntity[]): void {
-    let content = this.record.content;
-    for (let tag of tags) {
-      if (content.includes(tag.tagContent)) {
-        content = content.replaceAll(tag.tagContent, '<span style="color:red;">' + tag.tagContent + "</span>");
-      }
-    }
-    this.content.nativeElement.innerHTML = content;
-  }
+  // TODO: figure out later
+  // public colorTags(tags : TagEntity[]): void {
+  //   let content = this.record.content;
+  //   for (let tag of tags) {
+  //     if (content.includes(tag.tagContent)) {
+  //       content = content.replaceAll(tag.tagContent, '<span style="color:red;">' + tag.tagContent + "</span>");
+  //     }
+  //   }
+  //   this.content.nativeElement.innerHTML = content;
+  // }
 
 }
