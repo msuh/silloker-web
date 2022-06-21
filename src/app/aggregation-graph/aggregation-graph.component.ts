@@ -45,7 +45,6 @@ export class AggregationGraphComponent implements OnChanges {
     this.createSvg();
     this.graphAggregationGraph(this.aggregationOutput.keywords, 
                               this.aggregationOutput.aggregation); 
-    console.log(this.aggregationOutput);
 
       // this.graphAggregationGraph(["wangjo", "secretariat", "garrison"], 
       //                           this.aggregationOutput.totalRecordCount, true);
@@ -555,7 +554,6 @@ private getTickValues(xRange) {
             .x(function(d, i) { 
               //console.log(d, i);
               return x(xzToString[i]); })
-            //.y( d => { console.log(d); return yTotal(d[1])} )
             .y0(d => { return yTotal(d[0]); })
             .y1(d => { return yTotal(d[1]); })
           );
@@ -578,7 +576,6 @@ private getTickValues(xRange) {
           .attr('class', 'd3-tip')
           .offset([-10, 0])
           .html(function(d) {
-            console.log(d);
             return "<strong>count: </strong> <span style='color:red'>" + (d[1] - d[0]) + "</span>";
           });
     // this.svg.call(tip);

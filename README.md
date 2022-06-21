@@ -4,7 +4,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 
 
-### Introduction
+## Introduction
 Angular starts by executing main.ts file. It bootstraps the AppModule (app.module.ts) which loads everything and controls the startup of the application. 
 
 The @NgModule would list all components needed for index.html and the circle closes.
@@ -80,7 +80,7 @@ Then we can use the links to move to certain components by using the "routerLink
 </nav>
 ```
 
-## Styling (CSS)
+### Styling (CSS)
 Angular Material CSS styling does not get applied automatically. We must import (or build custom) one of the prebuilt themes to ensure the Angular Material standard css gets applied. In order to do so, import the themes from material in a globally applied css file by adding this line:
 
 `@import "~@angular/material/prebuilt-themes/indigo-pink.css";`
@@ -90,31 +90,31 @@ Global css file is configured in `angular.json` under `styles` where it is defau
 
 Useful examples of using angular components: https://mdbootstrap.com/docs/angular/navigation/mega-menu/
 
-## Development server
+### Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+### Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+### Build
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Running unit tests
+### Running unit tests
 
 Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Running end-to-end tests
+### Running end-to-end tests
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-## Further help
+### Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-## Module
+### Module
 TODO: explain module configuration, import, and usage. There generally is a central location (app.module.ts) that handles all used internal Components as well as the imported Modules. For example, there are a bunch of pre-configured Angular Material (https://material.angular.io/components/categories) that you can import and use. 
 
 If you want to use the Angular Input component (https://material.angular.io/components/input/overview), use the guide in the doc and API to import the appropriate Module `import {MatInputModule} from '@angular/material/input';` into *app.modules.ts*.
@@ -127,7 +127,7 @@ In terms of icons shown in this resource list: https://material.io/resources/ico
 ]
 ```
 
-## Binding
+### Binding
 In Angular, you can control almost like a read/write permission of components and fields. 
 `(variableName)` means that you can only read the value in the corresponding *.ts* file and the user inputs some value, whereas `[varabileName]` indicates the data can only be provided to the component and not written over by the user. Having both means bi-directional `[(variableName)]` actions are possible.
 For example, if you have 
@@ -172,14 +172,14 @@ And the corresponding *ts* file can have a parameter that takes in the value typ
 searchRecords(keyword: string) {}
 ```
 
-## ng-template
+### ng-template
 ```
 <ng-template [ngIf]="hasData" [ngIfElse]="otherTemplate"></ng-template>
 <ng-template #otherTemplate></ng-template>
 ```
 You can choose to display different chunks of html elements and data by defining a `ng-template` with a `[ngIf]` data where *hasData* is a variable in the corresponding Component. The `[ngIfElse]` can point to another template variable.
 
-## HTTP requests
+### HTTP requests
 Using pipe snatches the response or error before `subscribe` takes to do something. For example, if we want in-between computation or modification to the response, we can use pipe to return some new object `of({<variable>: <object>})`. This will add `<variable>` in the response in the `result` of subscribe.
 
 ```
@@ -208,7 +208,7 @@ this.http.post<inputObject>("/record/aggregation", input, httpOptions)
         );
 ```
 
-## Display Architecture
+### Display Architecture
 `index.html` is the main location that initially displays the contents when routed to `/` (home). It uses the `<app-root></app-root>` selector to display the components. The selectors for each component are determined in the `.ts` file within each component directory. 
 
 ```
@@ -225,5 +225,22 @@ this.http.post<inputObject>("/record/aggregation", input, httpOptions)
 The `<router-outlet></router-outlet>` defines where the selected routed components should be generated and displayed. 
 
 
+## Dockerization
 
+Dodckerizing the angular app references: https://dzone.com/articles/how-to-dockerize-angular-app, https://betterprogramming.pub/how-to-create-an-angular-dockerfile-75c059e7f8e8.
 
+### Creating the docker image
+
+The docker image for this application will be called `silloker-web`.
+```
+$ docker build -t sillokerweb .
+$ docker tag sillokerweb msuh/sillokerweb:0.1
+$ docker push msuh/sillokerweb:0.1
+```
+
+### Running the image on container
+
+Use `-d` for backgrond processing.
+```
+$ docker run [-d] -it -p <port>:80/tcp --name sillokerweb
+```

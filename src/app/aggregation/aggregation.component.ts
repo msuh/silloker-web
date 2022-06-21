@@ -7,6 +7,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { forkJoin, Observable, throwError, of } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 
+import { BACKEND_ADDR } from '../util/common';
+
 // DEPRECATED
 export interface KeywordInputAndAggregationV1 {
   // The list of keywords to query the count by year
@@ -135,19 +137,18 @@ export class AggregationComponent {
       let queryList = {};
       for (let inputIndex in this.keywordInputs) {
           let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[inputIndex]] };
-          queryList[inputIndex] = this.http.post<KeywordAggregation[]>("http://localhost:8080/record/aggregation", input, this.httpOptions);
+          queryList[inputIndex] = this.http.post<KeywordAggregation[]>( BACKEND_ADDR + "/record/aggregation", input, this.httpOptions);
       }
 
       // We also query the number of total entries for each record type that's searched within.
       for(let type of this.selectedRecordTypes) {
-        queryList[type] = this.http.get<KeywordAggregation[]>("http://localhost:8080/record/aggregation/" + type);
+        queryList[type] = this.http.get<KeywordAggregation[]>( BACKEND_ADDR + "/record/aggregation/" + type);
       }
       
 
       // forkJoin collects all the queries that only fires the subscribed reaction when all quries finish executing.
       forkJoin(queryList)
       .subscribe( (response) => {
-        console.log(response);
         // this.outputAggregation = [
         //  [ {year: 1626, count: 3}, {year: 1627, count: 2}, {year: 1635, count: 1}, {year: 1637, count: 8}, {year: 1700, count: 9} ],
         //  [ {year: 1626, count: 4}, {year: 1627, count: 5}, {year: 1635, count: 4}, {year: 1637, count: 7}, {year: 1702, count: 4} ],
@@ -281,7 +282,7 @@ export class AggregationComponent {
       //   }
       // );
     let input: SearchableRecord = {recordType: this.selectedRecordTypes, content: [this.keywordInputs[0]] };
-    this.http.post("http://localhost:8080/record/download/aggregation", input, { responseType: 'blob' })
+    this.http.post( BACKEND_ADDR + "/record/download/aggregation", input, { responseType: 'blob' })
     .subscribe( (response: any) => {
           //const blob = new Blob([response], { type : 'application/octet-stream' } )
           this.isFetching = false;

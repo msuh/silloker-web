@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 
 import { TagEntity } from '../record-entity/record-entity.component';
+import { BACKEND_ADDR } from '../util/common';
 
 @Component({
   selector: 'app-tag',

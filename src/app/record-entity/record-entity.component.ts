@@ -5,6 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 
 import { RecordEntity } from '../search/search.component';
 
+import { BACKEND_ADDR } from '../util/common';
+
 // TODO: move all the commonly used objects to a separate export file.
 // Representation for some key value pair.
 export interface KeyValue {
@@ -45,7 +47,7 @@ export class RecordEntityComponent implements OnInit {
 
   // TODO: do a fork-join so that the main content doesn't render faster
   ngOnInit(): void {
-    this.http.get<RecordEntity>("http://localhost:8080/record/id/" + this.recordId)
+    this.http.get<RecordEntity>( BACKEND_ADDR + "/record/id/" + this.recordId)
     .subscribe( (response) => {
           this.record = response;
         },
@@ -53,7 +55,7 @@ export class RecordEntityComponent implements OnInit {
           console.log(error);
         }
     );
-    this.http.get<TagEntity[]>("http://localhost:8080/tag/record/" + this.recordId)
+    this.http.get<TagEntity[]>( BACKEND_ADDR + "/tag/record/" + this.recordId)
     .subscribe( (response) => {
           this.tags = response;
           // this.colorTags(this.tags);

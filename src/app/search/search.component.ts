@@ -3,6 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 
+import { BACKEND_ADDR } from '../util/common';
+
 export interface RecordType {
   value: string;
   displayValue: string;
@@ -216,7 +218,7 @@ export class SearchComponent {
     //     edited: true
     //   }
     // ]
-    this.http.post<SearchResult>("http://localhost:8080/record/search?page="+pageIndex+"&size=50", input, this.httpOptions)
+    this.http.post<SearchResult>( BACKEND_ADDR + "/record/search?page="+pageIndex+"&size=50", input, this.httpOptions)
     .subscribe( (response) => {
           //console.log(response);
           this.totalCount = response.totalCount;
@@ -246,7 +248,7 @@ export class SearchComponent {
       input["year2"] = yearEnd;
     }
 
-    this.http.post("http://localhost:8080/record/download/search", input, { responseType: 'blob' })
+    this.http.post( BACKEND_ADDR + "/record/download/search", input, { responseType: 'blob' })
     .subscribe( (response: any) => {
           //const blob = new Blob([response], { type : 'application/octet-stream' } )
           this.isFetching = false;
