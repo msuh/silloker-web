@@ -13,7 +13,7 @@ export interface TagEntity {
 }
 
 
-const BACKEND_ADDR = "http://localhost:8080";
-// const BACKEND_ADDR = "http://3.140.156.59:8080";
+//const BACKEND_ADDR = "http://localhost:8080";
+const BACKEND_ADDR = "http://3.140.156.59:8080";
 
 export {BACKEND_ADDR};
