@@ -234,7 +234,7 @@ export class AggregationComponent {
         },
         error => {
             console.log(error);
-            this.errorMessage = error.error.error + " " + error.error.message;
+            this.errorMessage = error.error.error + ": " + error.error.message;
             this.isFetching = false;
         }
       );
@@ -296,7 +296,7 @@ export class AggregationComponent {
         },
         error => {
             console.log(error);
-            this.errorMessage = error.error.error + " " + error.error.message;
+            this.errorMessage = error.error.error + ": " + error.error.message;
             this.isFetching = false;
         }
     );

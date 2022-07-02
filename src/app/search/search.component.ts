@@ -227,7 +227,7 @@ export class SearchComponent {
         },
         error => {
             console.log(error);
-            this.errorMessage = error.error.error + " " + error.error.message;
+            this.errorMessage = error.error.error + ": " + error.error.message;
             this.isFetching = false;
         }
     );
@@ -262,7 +262,10 @@ export class SearchComponent {
         },
         error => {
             console.log(error);
-            this.errorMessage = error.error.error + " " + error.error.message;
+            if (error.error == undefined) {
+              this.errorMessage = "Error status: " + error.status;
+            }
+            this.errorMessage = error.error.error + ": " + error.error.message;
             this.isFetching = false;
         }
     );
