@@ -1,3 +1,11 @@
 {
-	"/": []
+	"/": [],
+	"/about": [],
+	"/aggregation": [],
+	"/api/search": [
+		"src/routes/api/search/+server.ts"
+	],
+	"/search": [
+		"src/routes/search/+page.ts"
+	]
 }

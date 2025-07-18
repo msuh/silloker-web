@@ -26,7 +26,7 @@
  * ```
  */
 declare module '$env/static/private' {
-	export const BACKEND_URL: string;
+	export const SECRET_BACKEND_URL: string;
 	export const NVM_INC: string;
 	export const npm_package_devDependencies__tailwindcss_typography: string;
 	export const LDFLAGS: string;
@@ -145,7 +145,7 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
-		BACKEND_URL: string;
+		SECRET_BACKEND_URL: string;
 		NVM_INC: string;
 		npm_package_devDependencies__tailwindcss_typography: string;
 		LDFLAGS: string;
