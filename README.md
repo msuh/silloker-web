@@ -231,6 +231,32 @@ this.http.post<inputObject>("/record/aggregation", input, httpOptions)
 
 The `<router-outlet></router-outlet>` defines where the selected routed components should be generated and displayed. 
 
+### digital envelope error
+
+```
+Error: error:0308010C:digital envelope routines::unsupported
+    at new Hash (node:internal/crypto/hash:69:19)
+    at Object.createHash (node:crypto:133:10)
+    at module.exports (/home/ec2-user/silloker-web/node_modules/webpack/lib/util/createHash.js:135:53)
+    at NormalModule._initBuildHash (/home/ec2-user/silloker-web/node_modules/webpack/lib/NormalModule.js:417:16)
+    at handleParseError (/home/ec2-user/silloker-web/node_modules/webpack/lib/NormalModule.js:471:10)
+    at /home/ec2-user/silloker-web/node_modules/webpack/lib/NormalModule.js:503:5
+    at /home/ec2-user/silloker-web/node_modules/webpack/lib/NormalModule.js:358:12
+    at /home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:373:3
+    at iterateNormalLoaders (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:214:10)
+    at iterateNormalLoaders (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:221:10)
+    at /home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:236:3
+    at runSyncOrAsync (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:130:11)
+    at iterateNormalLoaders (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:232:2)
+    at iterateNormalLoaders (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:221:10)
+    at /home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:236:3
+    at context.callback (/home/ec2-user/silloker-web/node_modules/loader-runner/lib/LoaderRunner.js:111:13)
+```
+Run this command
+$ export NODE_OPTIONS=--openssl-legacy-provider
+
+Then run the build again
+$ npm run build --prod
 
 ## Dockerization
 
