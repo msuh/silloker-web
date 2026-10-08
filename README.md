@@ -26,7 +26,7 @@ npm run dev
 
 The development server is available at [http://localhost:4200](http://localhost:4200).
 
-The original application called `http://3.140.156.59:8080` directly. That remains the default to preserve its API contract. Override it without changing source:
+The default API endpoint is `http://16.59.117.85:8080`. Override it without changing source:
 
 ```bash
 VITE_API_BASE_URL=http://localhost:8080 npm run dev
