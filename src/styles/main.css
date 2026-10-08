@@ -126,6 +126,18 @@ p {
   transform: translateY(0);
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  border: 0;
+  white-space: nowrap;
+}
+
 .app-shell {
   display: flex;
   min-height: 100vh;
@@ -416,10 +428,47 @@ p {
   height: 1.1rem;
 }
 
-.year-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+.year-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.year-range-label {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.year-range-label small {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.year-range-input {
+  width: 7.5rem;
+}
+
+.year-range-input .p-inputnumber-input {
+  width: 100%;
+  min-height: 2.45rem;
+  padding: 0.45rem 0.65rem;
+  border-color: var(--line);
+  border-radius: 0.55rem;
+}
+
+.year-range-separator,
+.year-range-bounds {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
 }
 
 .field-group {
@@ -980,7 +1029,6 @@ td:first-child {
     border-radius: 0.45rem;
   }
 
-  .year-grid,
   .metadata-grid {
     grid-template-columns: 1fr;
   }
@@ -1008,6 +1056,25 @@ td:first-child {
 }
 
 @media (max-width: 460px) {
+  .year-range {
+    gap: 0.35rem;
+  }
+
+  .year-range-label {
+    font-size: 0.7rem;
+  }
+
+  .year-range-label small,
+  .year-range-bounds {
+    display: none;
+  }
+
+  .year-range-input {
+    width: auto;
+    min-width: 0;
+    flex: 1 1 0;
+  }
+
   .record-type-grid {
     grid-template-columns: 1fr;
   }

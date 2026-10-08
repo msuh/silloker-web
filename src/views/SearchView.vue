@@ -164,29 +164,28 @@ onMounted(() => {
       <form class="search-form" @submit.prevent="executeSearch(0)">
         <RecordTypeSelector v-model="selectedRecordTypes" />
 
-        <div class="year-grid">
-          <div class="field-group">
-            <label for="year-start">Year start</label>
-            <span id="year-start-help" class="field-help">Optional; dynasty begins in 1392.</span>
-            <InputNumber
-              v-model="yearStart"
-              input-id="year-start"
-              :use-grouping="false"
-              placeholder="1500"
-              aria-describedby="year-start-help"
-            />
-          </div>
-          <div class="field-group">
-            <label for="year-end">Year end</label>
-            <span id="year-end-help" class="field-help">Optional; dynasty ends in 1910.</span>
-            <InputNumber
-              v-model="yearEnd"
-              input-id="year-end"
-              :use-grouping="false"
-              placeholder="1560"
-              aria-describedby="year-end-help"
-            />
-          </div>
+        <div class="year-range" role="group" aria-labelledby="year-range-label">
+          <span id="year-range-label" class="year-range-label">
+            Time range <small>optional</small>
+          </span>
+          <label class="visually-hidden" for="year-start">Start year</label>
+          <InputNumber
+            v-model="yearStart"
+            class="year-range-input"
+            input-id="year-start"
+            :use-grouping="false"
+            placeholder="Start"
+          />
+          <span class="year-range-separator" aria-hidden="true">to</span>
+          <label class="visually-hidden" for="year-end">End year</label>
+          <InputNumber
+            v-model="yearEnd"
+            class="year-range-input"
+            input-id="year-end"
+            :use-grouping="false"
+            placeholder="End"
+          />
+          <span class="year-range-bounds">1392–1910</span>
         </div>
 
         <KeywordInput
