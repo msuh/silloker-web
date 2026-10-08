@@ -185,7 +185,6 @@ onMounted(() => {
             :use-grouping="false"
             placeholder="End"
           />
-          <span class="year-range-bounds">1392–1910</span>
         </div>
 
         <KeywordInput

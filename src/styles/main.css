@@ -463,8 +463,12 @@ p {
   border-radius: 0.55rem;
 }
 
-.year-range-separator,
-.year-range-bounds {
+.year-range-input .p-inputnumber-input::placeholder {
+  color: #aeb6c2;
+  opacity: 1;
+}
+
+.year-range-separator {
   flex: 0 0 auto;
   color: var(--muted);
   font-size: 0.78rem;
@@ -1064,8 +1068,7 @@ td:first-child {
     font-size: 0.7rem;
   }
 
-  .year-range-label small,
-  .year-range-bounds {
+  .year-range-label small {
     display: none;
   }
 
