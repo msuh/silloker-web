@@ -23,7 +23,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape));
     <header class="site-header">
       <div class="header-inner">
         <RouterLink class="brand" to="/search" aria-label="Silloker search home" @click="closeMenu">
-          <span class="brand-mark" aria-hidden="true">實</span>
+          <span class="brand-mark" aria-hidden="true"></span>
           <span>
             <strong>Silloker</strong>
             <small>Records in context</small>

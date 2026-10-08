@@ -180,15 +180,12 @@ p {
 }
 
 .brand-mark {
-  display: grid;
+  display: block;
   width: 2.6rem;
   height: 2.6rem;
-  place-items: center;
-  color: #fff;
+  flex: 0 0 auto;
   background: var(--accent);
-  border-radius: 50% 50% 46% 54% / 55% 42% 58% 45%;
-  font-family: 'Newsreader', Georgia, serif;
-  font-size: 1.3rem;
+  border-radius: 50%;
   box-shadow: 0 6px 14px rgba(163, 58, 53, 0.2);
 }
 
