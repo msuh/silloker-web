@@ -47,9 +47,19 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape));
           :class="{ 'is-open': menuOpen }"
           aria-label="Primary navigation"
         >
-          <RouterLink to="/search" @click="closeMenu">Search</RouterLink>
-          <RouterLink to="/aggregation" @click="closeMenu">Aggregation</RouterLink>
-          <RouterLink to="/about" @click="closeMenu">About</RouterLink>
+          <div class="nav-primary-links">
+            <RouterLink to="/search" @click="closeMenu">
+              <i class="pi pi-search" aria-hidden="true"></i>
+              <span>Search</span>
+            </RouterLink>
+            <RouterLink to="/aggregation" @click="closeMenu">
+              <i class="pi pi-chart-line" aria-hidden="true"></i>
+              <span>Aggregation</span>
+            </RouterLink>
+          </div>
+          <div class="nav-secondary-links">
+            <RouterLink to="/about" @click="closeMenu">About</RouterLink>
+          </div>
         </nav>
       </div>
     </header>
