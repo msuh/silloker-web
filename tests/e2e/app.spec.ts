@@ -50,7 +50,7 @@ test('searches fixtures and opens a record with tags', async ({ page }) => {
   });
 
   await page.goto('/search');
-  await page.getByPlaceholder(/for example/i).fill('火藥');
+  await page.getByPlaceholder('鳥銃').fill('火藥');
   await page.getByRole('button', { name: 'Add' }).click();
   await page.getByRole('button', { name: /search records/i }).click();
 
@@ -83,7 +83,7 @@ test('renders aggregation charts from deterministic fixtures', async ({ page }) 
   });
 
   await page.goto('/aggregation');
-  await page.getByPlaceholder(/for example/i).fill('鳥銃');
+  await page.getByPlaceholder('火藥').fill('鳥銃');
   await page.getByRole('button', { name: 'Add' }).click();
   await page.getByRole('button', { name: /graph trends/i }).click();
 

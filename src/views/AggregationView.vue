@@ -131,7 +131,7 @@ const downloadResults = async (): Promise<void> => {
           v-model="keywords"
           :maximum="10"
           label="Terms to compare"
-          placeholder="For example, 火藥"
+          placeholder="火藥"
         />
         <div class="context-note">
           <i class="pi pi-info-circle" aria-hidden="true"></i>

@@ -190,7 +190,7 @@ onMounted(() => {
         <KeywordInput
           v-model="keywords"
           :maximum="5"
-          placeholder="For example, 鳥銃"
+          placeholder="鳥銃"
         />
 
         <div class="active-filter-summary" aria-live="polite">

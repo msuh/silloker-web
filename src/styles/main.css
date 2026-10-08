@@ -504,6 +504,11 @@ p {
   gap: 0.65rem;
 }
 
+.keyword-entry .p-inputtext::placeholder {
+  color: #aeb6c2;
+  opacity: 1;
+}
+
 .chip-list {
   display: flex;
   flex-wrap: wrap;

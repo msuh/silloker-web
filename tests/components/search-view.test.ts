@@ -39,7 +39,7 @@ describe('SearchView', () => {
 
   it('adds and removes keyword chips', async () => {
     await renderSearch();
-    const input = screen.getByPlaceholderText(/for example/i);
+    const input = screen.getByPlaceholderText('鳥銃');
     await fireEvent.update(input, '鳥銃');
     await fireEvent.click(screen.getByRole('button', { name: 'Add' }));
     expect(screen.getByText('鳥銃')).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('SearchView', () => {
     vi.mocked(searchRecords).mockResolvedValue({ totalCount: 0, entities: [] });
     await renderSearch();
 
-    await fireEvent.update(screen.getByPlaceholderText(/for example/i), '火藥');
+    await fireEvent.update(screen.getByPlaceholderText('鳥銃'), '火藥');
     await fireEvent.click(screen.getByRole('button', { name: 'Add' }));
     await fireEvent.click(screen.getByRole('button', { name: /search records/i }));
 
@@ -81,7 +81,7 @@ describe('SearchView', () => {
     vi.mocked(searchRecords).mockResolvedValue(response);
 
     await renderSearch();
-    await fireEvent.update(screen.getByPlaceholderText(/for example/i), '火藥');
+    await fireEvent.update(screen.getByPlaceholderText('鳥銃'), '火藥');
     await fireEvent.click(screen.getByRole('button', { name: 'Add' }));
     await fireEvent.click(screen.getByRole('button', { name: /search records/i }));
 
@@ -113,7 +113,7 @@ describe('SearchView', () => {
       .mockRejectedValueOnce(new Error('Service unavailable'));
 
     await renderSearch();
-    await fireEvent.update(screen.getByPlaceholderText(/for example/i), '火藥');
+    await fireEvent.update(screen.getByPlaceholderText('鳥銃'), '火藥');
     await fireEvent.click(screen.getByRole('button', { name: 'Add' }));
     await fireEvent.click(screen.getByRole('button', { name: /search records/i }));
 
