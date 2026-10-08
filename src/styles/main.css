@@ -291,11 +291,15 @@ p {
 
 .search-workspace,
 .results-section {
-  padding: clamp(1.4rem, 4vw, 3rem);
   border-radius: 1.3rem;
 }
 
+.search-workspace {
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+}
+
 .results-section {
+  padding: clamp(1.4rem, 4vw, 3rem);
   margin-top: 2rem;
 }
 
@@ -305,6 +309,10 @@ p {
   justify-content: space-between;
   margin-bottom: 1.8rem;
   gap: 1.5rem;
+}
+
+.search-workspace .section-heading {
+  margin-bottom: 1.25rem;
 }
 
 .section-heading .eyebrow {
@@ -327,7 +335,7 @@ p {
 
 .search-form {
   display: grid;
-  gap: 1.6rem;
+  gap: 1.2rem;
 }
 
 .record-type-selector {
@@ -337,36 +345,54 @@ p {
 
 .record-type-selector legend,
 .field-group > label {
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.45rem;
   color: var(--ink);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
 .record-type-selector legend {
   padding: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .record-type-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.25rem 0.5rem;
 }
 
 .check-option {
   display: flex;
-  min-height: 3.5rem;
+  min-width: 0;
   align-items: center;
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--line);
-  background: var(--surface-strong);
-  border-radius: 0.75rem;
+  padding: 0.4rem 0.5rem;
+  color: #445165;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
   cursor: pointer;
-  gap: 0.75rem;
+  font-size: 0.82rem;
+  gap: 0.45rem;
+  line-height: 1.3;
 }
 
 .check-option:hover {
-  border-color: #a9b2bc;
+  border-color: var(--line);
+  background: #f8f5ee;
+}
+
+.check-option .p-checkbox {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+}
+
+.check-option .p-checkbox-box {
+  width: 1.1rem;
+  height: 1.1rem;
 }
 
 .year-grid {
@@ -880,6 +906,12 @@ td:first-child {
   font-weight: 600;
 }
 
+@media (max-width: 960px) {
+  .record-type-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 760px) {
   .header-inner,
   .footer-inner,
@@ -913,7 +945,6 @@ td:first-child {
     border-radius: 0.45rem;
   }
 
-  .record-type-grid,
   .year-grid,
   .metadata-grid {
     grid-template-columns: 1fr;
@@ -942,6 +973,10 @@ td:first-child {
 }
 
 @media (max-width: 460px) {
+  .record-type-grid {
+    grid-template-columns: 1fr;
+  }
+
   .keyword-entry {
     grid-template-columns: 1fr;
   }
