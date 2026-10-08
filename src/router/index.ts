@@ -47,7 +47,7 @@ const router = createRouter({
       meta: { title: 'Page not found' },
     },
   ],
-  scrollBehavior: () => ({ top: 0 }),
+  scrollBehavior: (_to, _from, savedPosition) => savedPosition ?? { top: 0 },
 });
 
 router.afterEach((to) => {

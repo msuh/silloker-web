@@ -1,4 +1,6 @@
 <script setup lang="ts">
+defineOptions({ name: 'SearchView' });
+
 import Button from 'primevue/button';
 import InputNumber from 'primevue/inputnumber';
 import Message from 'primevue/message';

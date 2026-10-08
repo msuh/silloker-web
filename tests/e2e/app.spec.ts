@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 
-test('searches fixtures and opens a record with tags', async ({ page }) => {
+test('searches fixtures, opens a record, and preserves results on Back', async ({ page }) => {
+  let searchRequestCount = 0;
   await page.route('**/record/search?*', async (route) => {
+    searchRequestCount += 1;
     await route.fulfill({
       contentType: 'application/json',
       body: JSON.stringify({
@@ -58,6 +60,11 @@ test('searches fixtures and opens a record with tags', async ({ page }) => {
   await page.getByRole('link', { name: /open record/i }).click();
   await expect(page.getByRole('heading', { name: 'Firearms report' })).toBeVisible();
   await expect(page.getByRole('link', { name: '火藥' })).toHaveAttribute('href', '/tag/%E7%81%AB%E8%97%A5');
+
+  await page.goBack();
+  await expect(page.getByRole('heading', { name: /1 records/i })).toBeVisible();
+  await expect(page.getByRole('link', { name: /open record/i })).toBeVisible();
+  expect(searchRequestCount).toBe(1);
 });
 
 test('renders aggregation charts from deterministic fixtures', async ({ page }) => {

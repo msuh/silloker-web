@@ -65,7 +65,11 @@ onBeforeUnmount(() => window.removeEventListener('keydown', handleEscape));
     </header>
 
     <main id="main-content" class="main-content" tabindex="-1">
-      <RouterView />
+      <RouterView v-slot="{ Component }">
+        <KeepAlive include="SearchView">
+          <component :is="Component" />
+        </KeepAlive>
+      </RouterView>
     </main>
 
     <footer class="site-footer">
